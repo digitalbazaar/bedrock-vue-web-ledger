@@ -1,0 +1,63 @@
+{
+  "name": "bedrock-vue-web-ledger-test",
+  "version": "0.0.1-0",
+  "description": "Vue.js component for Web Ledger data test",
+  "private": true,
+  "browser": "./components/index.js",
+  "scripts": {
+    "start": "node --preserve-symlinks test.js",
+    "test": "node --preserve-symlinks test.js test --framework karma"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/digitalbazaar/bedrock-vue-web-ledger"
+  },
+  "keywords": [
+    "bedrock"
+  ],
+  "author": {
+    "name": "Digital Bazaar, Inc.",
+    "email": "support@digitalbazaar.com",
+    "url": "https://digitalbazaar.com/"
+  },
+  "bugs": {
+    "url": "https://github.com/digitalbazaar/bedrock-vue-web-ledger/issues"
+  },
+  "homepage": "https://github.com/digitalbazaar/bedrock-vue-web-leger",
+  "dependencies": {
+    "bedrock": "^1.17.0",
+    "bedrock-express": "^2.1.1",
+    "bedrock-fontawesome": "github:digitalbazaar/bedrock-fontawesome#initial",
+    "bedrock-karma": "^1.4.0",
+    "bedrock-quasar": "github:digitalbazaar/bedrock-quasar#webpack",
+    "bedrock-server": "^2.3.4",
+    "bedrock-test": "^2.0.0",
+    "bedrock-views": "github:digitalbazaar/bedrock-views#watch5",
+    "bedrock-vue": "github:digitalbazaar/bedrock-vue#webpack",
+    "bedrock-vue-web-ledger": "file:..",
+    "bedrock-web": "^1.1.0",
+    "bedrock-webpack": "github:digitalbazaar/bedrock-webpack#watch5",
+    "vue": "^2.6.10",
+    "vue-router": "^3.0.6",
+    "vuelidate": "^0.7.4"
+  },
+  "devDependencies": {
+    "eslint": "^5.14.1",
+    "eslint-config-digitalbazaar": "^2.0.0",
+    "eslint-plugin-vue": "^5.2.2",
+    "jsdoc-to-markdown": "^4.0.1",
+    "node-fetch": "^2.3.0"
+  },
+  "bedrock": {
+    "browserDependencies": "all",
+    "_browserDependencies": [
+      "@fortawesome/fontawesome-free",
+      "bedrock-quasar",
+      "bedrock-vue",
+      "bedrock-vue-web-ledger",
+      "vue",
+      "vue-router",
+      "vuelidate"
+    ]
+  }
+}
