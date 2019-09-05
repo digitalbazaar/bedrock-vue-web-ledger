@@ -1,11 +1,17 @@
 <template>
   <q-page class="row justify-center" padding>
     <div class="column" style="width: 800px; max-width: 90vw;">
-
       <h3 class="text-center">Block Explorer</h3>
-
-      <blocks :blocks="ledgerBlocks" :ledgerBlockService="ledgerBlockService" />
-
+      <blocks
+        v-if="!loading"
+        :blockCache="blockCache"
+        :blockIdBase="blockIdBase"
+        :latestBlockHeight="latestBlockHeight"
+        :startBlock="startBlock"
+        :ledgerBlockService="ledgerBlockService" />
+      <div v-if="loading && showLoading" class="flex flex-center">
+        <q-spinner-cube size="4em" />
+      </div>
     </div>
   </q-page>
 </template>
@@ -24,34 +30,40 @@ export default {
   name: 'BlockExplorer',
   components: {Blocks},
   async mounted() {
+    const showLoadingId = setTimeout(() => this.showLoading = true, 1000);
     const laResponse = await axios.get('/ledger-agents/', {headers});
     // FIXME: Don't assume there is only one ledger agent
     const ledgerAgent = laResponse.data.ledgerAgent[0];
     const bsResponse =
       await axios.get(ledgerAgent.service.ledgerBlockService);
-    const latestBlockHeight = bsResponse.data.latest.block.blockHeight;
-    let blockIdPattern = bsResponse.data.genesis.block.id;
-    blockIdPattern = blockIdPattern.substring(0, blockIdPattern.length - 1);
+    this.blockIdBase = bsResponse.data.genesis.block.id;
+    this.blockIdBase = this.blockIdBase.substring(0, this.blockIdBase.length - 1);
 
-    const blocks = [bsResponse.data.genesis];
-    for(let i = 1; i <= latestBlockHeight; i++) {
-      blocks.push({block: {id: blockIdPattern + i}});
-    }
+    const latestBlock = bsResponse.data.latest;
+    this.blockCache[latestBlock.block.id] = latestBlock;
+    this.latestBlockHeight = latestBlock.block.blockHeight + 1;
+
+    //const blocks = [bsResponse.data.genesis];
+    //for(let i = 1; i <= this.latestBlockHeight; i++) {
+    //  blocks.push({block: {id: blockIdBase + i}});
+    //}
+    //this.blocks = blocks;
 
     this.ledgerBlockService = ledgerAgent.service.ledgerBlockService;
-    this.ledgerBlocks = blocks;
+    this.startBlock = this.latestBlockHeight;
+    clearTimeout(showLoadingId);
+    this.loading = false;
   },
   data() {
     return {
-      ledgerBlockService: null,
-      ledgerBlocks: []
+      loading: true,
+      showLoading: false,
+      blockCache: {},
+      blockIdBase: null,
+      latestBlockHeight: 0,
+      startBlock: 0,
+      ledgerBlockService: null
     };
-  },
-  validations: {
-  },
-  watch: {
-  },
-  methods: {
   }
 };
 </script>

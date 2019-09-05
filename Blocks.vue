@@ -1,32 +1,46 @@
 <template>
   <div>
     <q-card>
-      <q-card-title align="center">
-        <q-field :orientation="horizontal">
-          <q-input type="number"
+      <q-card-section>
+        <div class="row items-center no-wrap">
+          <div class="col">
+            <div class="text-h5">Block <strong>{{currentBlock}}</strong> of <strong>{{latestBlockHeight}}</strong></div>
+          </div>
+          <div class="col-auto">
+            <q-btn flat icon="fas fa-search" @click="showSearch=!showSearch"/>
+          </div>
+        </div>
+        <div v-if="showSearch">
+          <q-input outlined
+            type="number" min="1" :max="latestBlockHeight"
             v-model="desiredBlock"
-            prefix="Block"
-            align="center"
-            :suffix="'of ' + this.blocks.length"
+            label="Load Block"
+            @change="setBlock(desiredBlock)"
             @blur="setBlock(desiredBlock)"
             @keyup.enter="setBlock(desiredBlock)"
-          />
-        </q-field>
-      </q-card-title>
-      <q-card-separator />
-      <q-card-main>
-        <tree-view :data="this.blocks[this.currentBlock - 1]"
-          :options="{maxDepth: 2}"></tree-view>
-      </q-card-main>
+            />
+        </div>
+      </q-card-section>
 
-      <q-card-separator />
-        <q-card-actions align="between">
-          <q-btn flat color="primary" label="Previous"
-            :disable="this.currentBlock <= 1" @click="previousBlock()"/>
-          <q-btn class="pull-right" flat color="primary" label="Next"
-            :disable="this.currentBlock >= this.blocks.length"
-            @click="nextBlock()"/>
-        </q-card-actions>
+      <q-separator />
+
+      <q-card-section>
+        <tree-view :data="currentBlockData"
+          :options="{maxDepth: 2}"></tree-view>
+      </q-card-section>
+
+      <q-separator />
+
+      <q-card-actions align="center">
+        <q-pagination
+          v-model="currentBlock"
+          min="1"
+          :max="latestBlockHeight"
+          :input="true"
+          @input="setBlock(currentBlock)"
+          >
+        </q-pagination>
+      </q-card-actions>
     </q-card>
   </div>
 </template>
@@ -43,50 +57,68 @@ export default {
   components: {},
   data() {
     return {
-      desiredBlock: 1,
-      currentBlock: 1
+      // map from blockId to {block,meta}
+      // FIXME: use LRU cache or shared prop cache?
+      blockCache: {},
+      desiredBlock: this.startBlock,
+      currentBlock: null,
+      currentBlockData: null,
+      showSearch: false
     };
   },
   props: {
-    blocks: {
-      type: Array,
+    blockCache: {
+      type: Object,
+      required: false
+    },
+    blockIdBase: {
+      type: String,
       required: true
+    },
+    latestBlockHeight: {
+      type: Number,
+      required: true
+    },
+    startBlock: {
+      type: Number,
+      default: () => this.latestBlockHeight,
+      required: false
     },
     ledgerBlockService: {
       type: String,
       required: true
     }
   },
-  watch: {
-    currentBlock() {
-      //console.log("CALC CBD", this.currentBlock);
-      this.getCurrentBlock();
-    }
+  mounted() {
+    this.setBlock(this.startBlock);
   },
   methods: {
+    makeBlockId(blockHeight) {
+      return this.blockIdBase + blockHeight;
+    },
     async getCurrentBlock() {
-      const fetchBlock = this.currentBlock - 1;
-      // console.log("GCB", this.blocks, fetchBlock,
-      //   this.ledgerBlockService, this.blocks[fetchBlock].id);
-      const block = await axios.get(this.ledgerBlockService, {
-        params: {
-          id: this.blocks[fetchBlock].block.id
-      }});
-      this.blocks[fetchBlock].block = block.data.block;
-      this.blocks[fetchBlock].meta = block.data.meta;
-      this.currentBlockData = this.blocks[fetchBlock];
+      const fetchBlockId = this.makeBlockId(this.currentBlock - 1)
+      if(!(fetchBlockId in this.blockCache)) {
+        const block = await axios.get(this.ledgerBlockService, {
+          params: {
+            id: fetchBlockId
+          }
+        });
+        this.blockCache[fetchBlockId] = {
+          block: block.data.block,
+          meta: block.data.meta
+        };
+      }
+      this.currentBlockData = this.blockCache[fetchBlockId];
+    },
+    clampBlock(value) {
+      return Math.max(1, Math.min(value, this.latestBlockHeight));
     },
     setBlock(value) {
-      // console.log("SET BLOCK value", value);
-      if(value > this.blocks.length) {
-        this.currentBlock = this.blocks.length;
-      } else if(value < 1) {
-        this.currentBlock = 1;
-      } else {
-        this.currentBlock = value;
-      }
-      // console.log("SET BLOCK set", this.currentBlock);
-      this.desiredBlock = this.currentBlock;
+      // clamp between 1 and total blocks
+      this.desiredBlock = this.clampBlock(value);
+      this.currentBlock = this.desiredBlock;
+      this.getCurrentBlock();
     },
     nextBlock() {
       this.setBlock(this.currentBlock + 1);
