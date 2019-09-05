@@ -4,29 +4,38 @@
       <q-card-section>
         <div class="row items-center no-wrap">
           <div class="col">
-            <div class="text-h5">Block <strong>{{currentBlock}}</strong> of <strong>{{latestBlockHeight}}</strong></div>
+            <div class="text-h5">
+              Block <strong>{{currentBlock}}</strong> of
+              <strong>{{latestBlockHeight}}</strong>
+            </div>
           </div>
           <div class="col-auto">
-            <q-btn flat icon="fas fa-search" @click="showSearch=!showSearch"/>
+            <q-btn
+              flat
+              icon="fas fa-search"
+              @click="showSearch=!showSearch" />
           </div>
         </div>
         <div v-if="showSearch">
-          <q-input outlined
-            type="number" min="1" :max="latestBlockHeight"
+          <q-input
             v-model="desiredBlock"
+            outlined
+            type="number"
+            min="1"
+            :max="latestBlockHeight"
             label="Load Block"
             @change="setBlock(desiredBlock)"
             @blur="setBlock(desiredBlock)"
-            @keyup.enter="setBlock(desiredBlock)"
-            />
+            @keyup.enter="setBlock(desiredBlock)" />
         </div>
       </q-card-section>
 
       <q-separator />
 
       <q-card-section>
-        <tree-view :data="currentBlockData"
-          :options="{maxDepth: 2}"></tree-view>
+        <tree-view
+          :data="currentBlockData"
+          :options="{maxDepth: 2}" />
       </q-card-section>
 
       <q-separator />
@@ -37,9 +46,7 @@
           min="1"
           :max="latestBlockHeight"
           :input="true"
-          @input="setBlock(currentBlock)"
-          >
-        </q-pagination>
+          @input="setBlock(currentBlock)" />
       </q-card-actions>
     </q-card>
   </div>
@@ -55,20 +62,10 @@ import axios from 'axios';
 export default {
   name: 'Blocks',
   components: {},
-  data() {
-    return {
-      // map from blockId to {block,meta}
-      // FIXME: use LRU cache or shared prop cache?
-      blockCache: {},
-      desiredBlock: this.startBlock,
-      currentBlock: null,
-      currentBlockData: null,
-      showSearch: false
-    };
-  },
   props: {
     blockCache: {
       type: Object,
+      default: () => {},
       required: false
     },
     blockIdBase: {
@@ -89,6 +86,14 @@ export default {
       required: true
     }
   },
+  data() {
+    return {
+      desiredBlock: this.startBlock,
+      currentBlock: null,
+      currentBlockData: null,
+      showSearch: false
+    };
+  },
   mounted() {
     this.setBlock(this.startBlock);
   },
@@ -97,7 +102,7 @@ export default {
       return this.blockIdBase + blockHeight;
     },
     async getCurrentBlock() {
-      const fetchBlockId = this.makeBlockId(this.currentBlock - 1)
+      const fetchBlockId = this.makeBlockId(this.currentBlock - 1);
       if(!(fetchBlockId in this.blockCache)) {
         const block = await axios.get(this.ledgerBlockService, {
           params: {
