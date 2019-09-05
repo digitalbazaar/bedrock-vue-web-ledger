@@ -3,7 +3,7 @@ module.exports = {
     browser: true
   },
   extends: [
-    'digitalbazaar'
+    'digitalbazaar',
     'digitalbazaar/vue'
   ]
 };
