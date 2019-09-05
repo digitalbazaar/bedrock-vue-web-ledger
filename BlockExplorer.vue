@@ -36,11 +36,17 @@ export default {
     const ledgerAgent = laResponse.data.ledgerAgent[0];
     const bsResponse =
       await axios.get(ledgerAgent.service.ledgerBlockService);
-    this.blockIdBase = bsResponse.data.genesis.block.id;
-    this.blockIdBase = this.blockIdBase.substring(0, this.blockIdBase.length - 1);
+
+    const genesisBlock = bsResponse.data.genesis;
+    this.blockCache[genesisBlock.block.id] = genesisBlock;
 
     const latestBlock = bsResponse.data.latest;
     this.blockCache[latestBlock.block.id] = latestBlock;
+
+    this.blockIdBase = genesisBlock.block.id;
+    this.blockIdBase = this.blockIdBase.substring(0, this.blockIdBase.length - 1);
+
+
     this.latestBlockHeight = latestBlock.block.blockHeight + 1;
 
     //const blocks = [bsResponse.data.genesis];
