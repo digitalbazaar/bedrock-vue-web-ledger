@@ -4,5 +4,6 @@
 
 ### Added
 - Add core files.
+- Initial simple block browser behavior.
 
 - See git history for changes previous to this release.
