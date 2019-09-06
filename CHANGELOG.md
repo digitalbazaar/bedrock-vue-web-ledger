@@ -1,6 +1,6 @@
 # bedrock-vue-web-ledger ChangeLog
 
-## 1.0.0 - 2019-xx-xx
+## 0.1.0 - 2019-09-06
 
 ### Added
 - Add core files.
