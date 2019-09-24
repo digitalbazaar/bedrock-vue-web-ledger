@@ -37,6 +37,12 @@ const headers = {Accept: 'application/ld+json, application/json'};
 export default {
   name: 'BlockExplorer',
   components: {Blocks},
+  props: {
+    startBlock: {
+      type: Number,
+      default: null
+    }
+  },
   data() {
     return {
       loading: true,
@@ -46,7 +52,6 @@ export default {
       blockCache: {},
       blockIdBase: null,
       latestBlockHeight: 0,
-      startBlock: 0,
       ledgerBlockService: null
     };
   },
@@ -70,7 +75,8 @@ export default {
 
     this.latestBlockHeight = latestBlock.block.blockHeight + 1;
     this.ledgerBlockService = ledgerAgent.service.ledgerBlockService;
-    this.startBlock = this.latestBlockHeight;
+    this.startBlock = this.startBlock === null ?
+      this.latestBlockHeight : this.startBlock;
     clearTimeout(showLoadingId);
     this.loading = false;
   }
