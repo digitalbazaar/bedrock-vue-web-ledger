@@ -1,6 +1,6 @@
 {
   "name": "bedrock-vue-web-ledger",
-  "version": "0.2.0",
+  "version": "0.2.1-0",
   "description": "Vue.js component for Web Ledger data",
   "license": "SEE LICENSE IN LICENSE.md",
   "main": "index.js",
