@@ -1,6 +1,6 @@
 # bedrock-vue-web-ledger ChangeLog
 
-## 0.2.0 -
+## 0.2.0 - 2019-09-25
 
 ### Added
 - Make start-block configurable.
