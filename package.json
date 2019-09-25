@@ -4,6 +4,10 @@
   "description": "Vue.js component for Web Ledger data",
   "license": "SEE LICENSE IN LICENSE.md",
   "main": "index.js",
+  "files": [
+    "index.js",
+    "*.vue"
+  ],
   "peerDependencies": {
     "bedrock-quasar": "^3.0.0",
     "vue": "^2.6.10",
