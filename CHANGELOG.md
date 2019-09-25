@@ -1,5 +1,7 @@
 # bedrock-vue-web-ledger ChangeLog
 
+## 0.2.1 - 2019-09-25
+
 ### Changed
 - Limit distributed files.
 
