@@ -1,13 +1,9 @@
 <template>
-  <q-page
-    class="row justify-center"
-    padding>
+  <div
+    class="row justify-center">
     <div
       class="column"
       style="width: 800px; max-width: 90vw;">
-      <h3 class="text-center">
-        Block Explorer
-      </h3>
       <blocks
         v-if="!loading"
         :block-cache="blockCache"
@@ -21,7 +17,7 @@
         <q-spinner-cube size="4em" />
       </div>
     </div>
-  </q-page>
+  </div>
 </template>
 <script>
 /*!
