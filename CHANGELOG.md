@@ -1,5 +1,10 @@
 # bedrock-vue-web-ledger ChangeLog
 
+## 0.3.0 - 2019-10-03
+
+### Changed
+- Remove title and q-page wrapper.
+
 ## 0.2.1 - 2019-09-25
 
 ### Changed
