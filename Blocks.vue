@@ -21,7 +21,7 @@
             v-model="desiredBlock"
             outlined
             type="number"
-            min="1"
+            :min="1"
             :max="latestBlockHeight"
             label="Load Block"
             @change="setBlock(desiredBlock)"
@@ -43,7 +43,7 @@
       <q-card-actions align="center">
         <q-pagination
           v-model="currentBlock"
-          min="1"
+          :min="1"
           :max="latestBlockHeight"
           :input="true"
           @input="setBlock(currentBlock)" />
@@ -89,7 +89,7 @@ export default {
   data() {
     return {
       desiredBlock: this.startBlock,
-      currentBlock: null,
+      currentBlock: this.startBlock,
       currentBlockData: null,
       showSearch: false
     };
