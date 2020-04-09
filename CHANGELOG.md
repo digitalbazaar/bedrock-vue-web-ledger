@@ -1,5 +1,10 @@
 # bedrock-vue-web-ledger ChangeLog
 
+## 0.3.1 - 2020-04-09
+
+### Fixed
+- Fix min and currentBlock prop type warnings.
+
 ## 0.3.0 - 2019-10-03
 
 ### Changed
