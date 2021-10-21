@@ -58,7 +58,6 @@ export default {
     const ledgerAgent = laResponse.data.ledgerAgent[0];
     const bsResponse =
       await httpClient.get(ledgerAgent.service.ledgerBlockService);
-
     const genesisBlock = bsResponse.data.genesis;
     this.blockCache[genesisBlock.block.id] = genesisBlock;
 

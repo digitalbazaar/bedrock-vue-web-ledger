@@ -1,5 +1,10 @@
 # bedrock-vue-web-ledger ChangeLog
 
+## 0.4.0 - TBD
+
+### Changed
+- **BREAKING:** Remove `axios` in favor of `@digitalbazaar/http-client`.
+
 ## 0.3.1 - 2020-04-09
 
 ### Fixed
