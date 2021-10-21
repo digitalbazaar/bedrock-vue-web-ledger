@@ -105,7 +105,7 @@ export default {
       const fetchBlockId = this.makeBlockId(this.currentBlock - 1);
       if(!(fetchBlockId in this.blockCache)) {
         const block = await httpClient.get(this.ledgerBlockService, {
-          params: {
+          searchParams: {
             id: fetchBlockId
           }
         });
