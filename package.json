@@ -36,7 +36,7 @@
     "eslint-plugin-vue": "^7.20.0"
   },
   "dependencies": {
-    "axios": "^0.19.0",
+    "@digitalbazaar/http-client": "^1.2.0",
     "vue-json-tree-view": "^2.1.4"
   },
   "scripts": {

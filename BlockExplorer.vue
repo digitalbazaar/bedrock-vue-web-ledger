@@ -25,7 +25,7 @@
  */
 'use strict';
 
-import axios from 'axios';
+import {httpClient} from '@digitalbazaar/http-client';
 import Blocks from './Blocks.vue';
 
 const headers = {Accept: 'application/ld+json, application/json'};
@@ -53,11 +53,11 @@ export default {
   },
   async mounted() {
     const showLoadingId = setTimeout(() => this.showLoading = true, 1000);
-    const laResponse = await axios.get('/ledger-agents/', {headers});
+    const laResponse = await httpClient.get('/ledger-agents/', {headers});
     // FIXME: Don't assume there is only one ledger agent
     const ledgerAgent = laResponse.data.ledgerAgent[0];
     const bsResponse =
-      await axios.get(ledgerAgent.service.ledgerBlockService);
+      await httpClient.get(ledgerAgent.service.ledgerBlockService);
 
     const genesisBlock = bsResponse.data.genesis;
     this.blockCache[genesisBlock.block.id] = genesisBlock;

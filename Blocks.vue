@@ -57,7 +57,7 @@
  */
 'use strict';
 
-import axios from 'axios';
+import {httpClient} from '@digitalbazaar/http-client';
 
 export default {
   name: 'Blocks',
@@ -104,7 +104,7 @@ export default {
     async getCurrentBlock() {
       const fetchBlockId = this.makeBlockId(this.currentBlock - 1);
       if(!(fetchBlockId in this.blockCache)) {
-        const block = await axios.get(this.ledgerBlockService, {
+        const block = await httpClient.get(this.ledgerBlockService, {
           params: {
             id: fetchBlockId
           }
